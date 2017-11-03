@@ -4,6 +4,8 @@ var gulp = require('gulp'),
   sass = require('gulp-sass'),
   uglify = require('gulp-uglify'),
   concat = require('gulp-concat'),
+  gulpxlsx = require('gulp-js-xlsx'),
+  rename = require('gulp-rename'),
   browsersync = require('browser-sync').create();
 
 gulp.task('build', ['css','scripts']);
@@ -25,6 +27,14 @@ gulp.task('browser-sync',function() {
   browsersync.init(prototype_config);
 });
 
+gulp.task('convert', function() {
+ gulp.src('xlsx/*.xlsx')
+        .pipe(gulpxlsx.run({
+            parseWorksheet: 'tree'
+        }))
+        .pipe(rename({extname: '.json'}))
+        .pipe(gulp.dest('json'));
+});
 
 gulp.task('bs-reload', function() {
   browsersync.reload();
